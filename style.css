@@ -3,27 +3,26 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #0d1117;
+  background-color: #1a1a2e; /* Fond sombre moderne */
   overflow: hidden;
-  font-family: sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
 }
 
-.scene { perspective: 1000px; }
+.scene { perspective: 1200px; } /* Augmenté la perspective pour un effet 3D plus marqué */
 
 .book {
   position: relative;
   width: 200px;
   height: 300px;
   transform-style: preserve-3d;
-  transform: rotateX(30deg) rotateY(-10deg);
-  transition: transform 1s;
-  cursor: pointer; /* Montre que c'est cliquable */
+  transform: rotateX(20deg) rotateY(-15deg); /* Ajusté l'angle initial */
+  transition: transform 1s ease-in-out;
+  cursor: pointer;
 }
 
-/* Quand le livre est ouvert, on le redresse un peu */
 .book.open {
-  transform: rotateX(10deg) rotateY(0deg);
+  transform: rotateX(5deg) rotateY(0deg); /* Angle une fois ouvert */
 }
 
 /* --- LES ÉLÉMENTS DU LIVRE --- */
@@ -34,50 +33,42 @@ body {
   top: 0; left: 0;
   transform-origin: left center;
   border-radius: 5px 15px 15px 5px;
-  box-shadow: inset 4px 0 10px rgba(0,0,0,0.1);
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.15);
   transition: transform 1s ease-in-out, z-index 0.5s;
 }
 
 .cover-back {
-  background: #8b4513;
-  border: 2px solid #5a2d0c;
+  background: #331a1a; /* Couleur de couverture foncée */
+  border: 3px solid #663333; /* Bordure de couverture */
 }
 
 .cover-front {
-  background: #8b4513;
-  border: 2px solid #ffd700;
+  background: #331a1a; /* Couleur de couverture foncée */
+  border: 5px solid #ffcc00; /* Bordure plus épaisse, couleur or */
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffd700;
+  color: #ffcc00; /* Texte potentiel si vous en remettez un */
   flex-direction: column;
 }
 
-.book-title {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
 .page {
-  background: #fffaf0;
-  border: 1px solid #ddd;
+  background: #fdfaf0; /* Blanc cassé clair */
+  border: 1px solid #ccc;
   z-index: 5;
 }
 
 /* --- LOGIQUE D'OUVERTURE (ACTIVE PAR JS) --- */
 
-/* 1. La couverture s'ouvre */
 .book.open .cover-front {
-  transform: rotateY(-160deg);
-  z-index: 1; /* Elle passe derrière après l'ouverture */
+  transform: rotateY(-170deg); /* Ouvre plus grand */
+  z-index: 1;
 }
 
-/* 2. Les pages tournent avec un petit délai */
-.book.open .page:nth-child(3) { transition-delay: 0.3s; transform: rotateY(-150deg); z-index: 4; }
-.book.open .page:nth-child(4) { transition-delay: 0.6s; transform: rotateY(-145deg); z-index: 5; }
-.book.open .page:nth-child(5) { transition-delay: 0.9s; transform: rotateY(-140deg); z-index: 6; }
+.book.open .page:nth-child(3) { transition-delay: 0.3s; transform: rotateY(-155deg); z-index: 4; }
+.book.open .page:nth-child(4) { transition-delay: 0.6s; transform: rotateY(-150deg); z-index: 5; }
+.book.open .page:nth-child(5) { transition-delay: 0.9s; transform: rotateY(-145deg); z-index: 6; }
 
 /* --- PAGE DE CONTENU --- */
 .page-content {
@@ -86,6 +77,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* Supprimez tout style de texte si vous ne voulez rien */
 }
 
 /* --- PARTICULES MAGIQUES --- */
@@ -93,8 +85,8 @@ body {
   position: absolute;
   width: 100%; height: 100%;
   pointer-events: none;
-  opacity: 0; /* Caché quand fermé */
-  transition: opacity 1s 1s; /* Apparaît après 1 seconde */
+  opacity: 0;
+  transition: opacity 1s 1.2s ease-out; /* Retardé pour apparaître après l'ouverture */
 }
 
 .book.open .magic-particles {
@@ -103,23 +95,26 @@ body {
 
 .particle {
   position: absolute;
-  bottom: 20%; left: 50%;
-  width: 8px; height: 8px;
-  background: radial-gradient(circle, #fff, #ffd700, transparent);
+  bottom: 35%; /* Démarrage plus haut dans le livre */
+  left: 50%;
+  width: 10px; /* Particules un peu plus grandes */
+  height: 10px;
+  background: radial-gradient(circle, #ffffff, #8be9fd, transparent); /* Magie bleu-blanc */
   border-radius: 50%;
   opacity: 0;
-  box-shadow: 0 0 10px #ffd700;
+  box-shadow: 0 0 15px #8be9fd, 0 0 5px #ffffff; /* Lueur plus intense et blanche */
+  transform: translateX(-50%); /* Centrer la particule */
 }
 
-/* Les particules s'animent en boucle uniquement quand le livre est 'open' */
-.book.open .particle:nth-child(1) { animation: floatUp 2s infinite; left: 40%; }
-.book.open .particle:nth-child(2) { animation: floatUp 2.5s 0.2s infinite; left: 60%; width: 5px; }
-.book.open .particle:nth-child(3) { animation: floatUp 1.8s 0.5s infinite; left: 30%; width: 6px; }
-.book.open .particle:nth-child(4) { animation: floatUp 2.2s 0.1s infinite; left: 70%; }
-.book.open .particle:nth-child(5) { animation: floatUp 3s 0.3s infinite; left: 50%; width: 4px; }
+/* Animation individuelle des particules */
+.book.open .particle:nth-child(1) { animation: floatUp 2.5s infinite; left: 40%; }
+.book.open .particle:nth-child(2) { animation: floatUp 3s 0.2s infinite; left: 60%; width: 7px; height: 7px; }
+.book.open .particle:nth-child(3) { animation: floatUp 2.2s 0.5s infinite; left: 30%; width: 8px; height: 8px; }
+.book.open .particle:nth-child(4) { animation: floatUp 2.8s 0.1s infinite; left: 70%; }
+.book.open .particle:nth-child(5) { animation: floatUp 3.5s 0.3s infinite; left: 50%; width: 6px; height: 6px; }
 
 @keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(-150px) scale(0); opacity: 0; }
+  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } /* Démarrage plus petit, caché */
+  10% { opacity: 1; transform: translate(-50%, 0) scale(1); } /* Apparition rapide, taille normale */
+  100% { transform: translate(-50%, -200px) scale(0); opacity: 0; } /* Monte plus haut et disparaît */
 }
