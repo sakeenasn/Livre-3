@@ -1,60 +1,147 @@
+/* --- CONFIGURATION GLOBALE --- */
 body {
-    margin: 0;
-    overflow: hidden;
-    background: linear-gradient(#3b2e2e, #1c1c1c); /* effet bibliothèque */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #0d1117; /* Fond sombre style GitHub */
+  overflow: hidden;
+  font-family: sans-serif;
+  margin: 0;
 }
 
+/* --- LA SCÈNE 3D --- */
 .scene {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
+  perspective: 1000px; /* Donne la profondeur 3D */
 }
 
-/* Livre */
-.livre {
-    width: 100px;
-    height: 140px;
-    background: brown;
-    border: 3px solid #6b3e1e;
-    position: absolute;
-    top: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 5px;
+.book {
+  position: relative;
+  width: 200px;  /* Largeur du livre */
+  height: 300px; /* Hauteur du livre */
+  transform-style: preserve-3d;
+  transform: rotateX(30deg) rotateY(-10deg); /* Angle de vue initial */
+  transition: transform 1s;
 }
 
-/* Page */
+/* --- PAGES ET COUVERTURES (STYLE DE BASE) --- */
+.page, .cover-front, .cover-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform-origin: left center; /* Les pages tournent depuis la gauche (la reliure) */
+  border-radius: 5px 15px 15px 5px;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.1);
+}
+
+/* --- COUVERTURE ARRIÈRE (Le dos du livre) --- */
+.cover-back {
+  background: #8b4513; /* Couleur Cuir Marron */
+  border: 2px solid #5a2d0c;
+  transform: rotateY(0deg);
+  z-index: 0;
+}
+
+/* --- COUVERTURE AVANT (Celle qui s'ouvre) --- */
+.cover-front {
+  background: #8b4513; /* Couleur Cuir Marron */
+  border: 2px solid #ffd700; /* Bordure Dorée */
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd700; /* Texte doré */
+  font-size: 2rem;
+  font-weight: bold;
+  
+  /* L'animation d'ouverture */
+  animation: openBook 3s forwards ease-in-out;
+}
+
+/* --- LES PAGES BLANCHES --- */
 .page {
-    width: 110px;
-    height: 130px;
-    background: white;
-    position: absolute;
-    top: 300px;
-    left: 50%;
-    transform: translateX(-50%) rotateY(90deg);
-    opacity: 0;
-    border-radius: 3px;
+  background: #fffaf0; /* Blanc cassé / Papier ancien */
+  border: 1px solid #ddd;
+  z-index: 5;
 }
 
-/* Particules lumineuses */
-.particles {
-    position: absolute;
-    top: 320px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 200px;
-    pointer-events: none;
-    opacity: 0;
-    overflow: visible;
+/* --- ANIMATION DES PAGES QUI TOURNENT --- */
+/* On retarde chaque page pour qu'elles ne tournent pas toutes en même temps */
+.page:nth-child(3) { z-index: 4; animation: turnPage 2.5s 1.2s forwards; }
+.page:nth-child(4) { z-index: 3; animation: turnPage 2.5s 1.4s forwards; }
+.page:nth-child(5) { z-index: 2; animation: turnPage 2.5s 1.6s forwards; }
+
+/* --- LA PAGE DE CONTENU (Celle qui reste fixe) --- */
+.page-content {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+.page-content h3 { font-size: 18px; color: #333; margin: 0 0 10px 0; }
+.page-content p { font-size: 12px; color: #555; }
+
+/* --- PARTICULES MAGIQUES --- */
+.magic-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform: translateZ(50px); /* Flotte au dessus du livre */
+  z-index: 20;
 }
 
 .particle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 8px white;
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #fff, #ffd700, transparent); /* Dégradé or/blanc */
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 10px #ffd700; /* Effet de lueur (Glow) */
+}
+
+/* Animation individuelle des particules */
+.particle:nth-child(1) { animation: floatUp 2s 3s infinite; left: 40%; }
+.particle:nth-child(2) { animation: floatUp 2.5s 3.2s infinite; left: 60%; width: 5px; height: 5px; }
+.particle:nth-child(3) { animation: floatUp 1.8s 3.5s infinite; left: 30%; width: 6px; height: 6px; }
+.particle:nth-child(4) { animation: floatUp 2.2s 3.1s infinite; left: 70%; }
+.particle:nth-child(5) { animation: floatUp 3s 3.3s infinite; left: 50%; width: 4px; height: 4px; }
+
+/* --- KEYFRAMES (La logique des mouvements) --- */
+
+/* 1. Ouvrir la couverture */
+@keyframes openBook {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(-160deg); }
+}
+
+/* 2. Tourner une page */
+@keyframes turnPage {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(-155deg); }
+}
+
+/* 3. Faire monter les particules */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
     opacity: 0;
+  }
+  20% {
+    opacity: 1; /* Apparition rapide */
+  }
+  100% {
+    transform: translateY(-150px) scale(0); /* Monte et rétrécit */
+    opacity: 0;
+  }
 }
