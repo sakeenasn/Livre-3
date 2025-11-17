@@ -3,26 +3,26 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #1a1a2e; /* Fond sombre moderne */
+  background-color: #120a1a; /* Fond encore plus sombre et un peu violacé */
   overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
 }
 
-.scene { perspective: 1200px; } /* Augmenté la perspective pour un effet 3D plus marqué */
+.scene { perspective: 1200px; }
 
 .book {
   position: relative;
   width: 200px;
   height: 300px;
   transform-style: preserve-3d;
-  transform: rotateX(20deg) rotateY(-15deg); /* Ajusté l'angle initial */
+  transform: rotateX(20deg) rotateY(-15deg);
   transition: transform 1s ease-in-out;
   cursor: pointer;
 }
 
 .book.open {
-  transform: rotateX(5deg) rotateY(0deg); /* Angle une fois ouvert */
+  transform: rotateX(5deg) rotateY(0deg);
 }
 
 /* --- LES ÉLÉMENTS DU LIVRE --- */
@@ -33,36 +33,39 @@ body {
   top: 0; left: 0;
   transform-origin: left center;
   border-radius: 5px 15px 15px 5px;
-  box-shadow: inset 4px 0 10px rgba(0,0,0,0.15);
+  box-shadow: inset 4px 0 15px rgba(0,0,0,0.25); /* Ombre plus intense */
   transition: transform 1s ease-in-out, z-index 0.5s;
 }
 
 .cover-back {
-  background: #331a1a; /* Couleur de couverture foncée */
-  border: 3px solid #663333; /* Bordure de couverture */
+  background: #2b1738; /* Couleur de couverture foncée violette */
+  border: 3px solid #5a2e6f; /* Bordure de couverture violette */
 }
 
 .cover-front {
-  background: #331a1a; /* Couleur de couverture foncée */
-  border: 5px solid #ffcc00; /* Bordure plus épaisse, couleur or */
+  background: #2b1738;
+  border: 5px solid #ff00ff; /* Bordure éclatante (Magenta) */
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffcc00; /* Texte potentiel si vous en remettez un */
+  color: #ff00ff; /* Couleur du texte si vous en remettez un */
   flex-direction: column;
 }
 
 .page {
-  background: #fdfaf0; /* Blanc cassé clair */
+  background: #fdfaf0;
   border: 1px solid #ccc;
   z-index: 5;
+  /* Reflet de la magie sur les pages ouvertes */
+  box-shadow: inset 4px 0 15px rgba(0,0,0,0.25), 
+              0 0 20px rgba(255,0,255,0.3) inset; /* Lueur violette sur la page */
 }
 
 /* --- LOGIQUE D'OUVERTURE (ACTIVE PAR JS) --- */
 
 .book.open .cover-front {
-  transform: rotateY(-170deg); /* Ouvre plus grand */
+  transform: rotateY(-170deg);
   z-index: 1;
 }
 
@@ -70,14 +73,13 @@ body {
 .book.open .page:nth-child(4) { transition-delay: 0.6s; transform: rotateY(-150deg); z-index: 5; }
 .book.open .page:nth-child(5) { transition-delay: 0.9s; transform: rotateY(-145deg); z-index: 6; }
 
-/* --- PAGE DE CONTENU --- */
+/* --- PAGE DE CONTENU (celle avec les particules) --- */
 .page-content {
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Supprimez tout style de texte si vous ne voulez rien */
 }
 
 /* --- PARTICULES MAGIQUES --- */
@@ -86,7 +88,7 @@ body {
   width: 100%; height: 100%;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 1s 1.2s ease-out; /* Retardé pour apparaître après l'ouverture */
+  transition: opacity 1s 0.8s ease-out; /* Apparaît un peu plus tôt */
 }
 
 .book.open .magic-particles {
@@ -95,26 +97,32 @@ body {
 
 .particle {
   position: absolute;
-  bottom: 35%; /* Démarrage plus haut dans le livre */
+  bottom: 35%; /* Position de départ dans le livre */
   left: 50%;
-  width: 10px; /* Particules un peu plus grandes */
-  height: 10px;
-  background: radial-gradient(circle, #ffffff, #8be9fd, transparent); /* Magie bleu-blanc */
+  width: 12px; /* Particules un peu plus grandes */
+  height: 12px;
+  background: radial-gradient(circle, #ffffff, #ff00ff, transparent); /* Magie Blanc/Magenta */
   border-radius: 50%;
   opacity: 0;
-  box-shadow: 0 0 15px #8be9fd, 0 0 5px #ffffff; /* Lueur plus intense et blanche */
+  box-shadow: 0 0 20px #ff00ff, 0 0 8px #ffffff; /* Lueur plus intense */
   transform: translateX(-50%); /* Centrer la particule */
 }
 
-/* Animation individuelle des particules */
-.book.open .particle:nth-child(1) { animation: floatUp 2.5s infinite; left: 40%; }
-.book.open .particle:nth-child(2) { animation: floatUp 3s 0.2s infinite; left: 60%; width: 7px; height: 7px; }
-.book.open .particle:nth-child(3) { animation: floatUp 2.2s 0.5s infinite; left: 30%; width: 8px; height: 8px; }
-.book.open .particle:nth-child(4) { animation: floatUp 2.8s 0.1s infinite; left: 70%; }
-.book.open .particle:nth-child(5) { animation: floatUp 3.5s 0.3s infinite; left: 50%; width: 6px; height: 6px; }
+/* Animation individuelle des particules (plus de variété et de délais) */
+.book.open .particle:nth-child(1) { animation: floatUp 2.8s infinite; left: 40%; width: 10px; height: 10px; }
+.book.open .particle:nth-child(2) { animation: floatUp 3.2s 0.2s infinite; left: 60%; width: 14px; height: 14px; }
+.book.open .particle:nth-child(3) { animation: floatUp 2.5s 0.5s infinite; left: 30%; width: 11px; height: 11px; }
+.book.open .particle:nth-child(4) { animation: floatUp 3s 0.1s infinite; left: 70%; width: 13px; height: 13px; }
+.book.open .particle:nth-child(5) { animation: floatUp 3.5s 0.3s infinite; left: 50%; width: 9px; height: 9px; }
+.book.open .particle:nth-child(6) { animation: floatUp 2.9s 0.7s infinite; left: 35%; width: 12px; height: 12px; }
+.book.open .particle:nth-child(7) { animation: floatUp 3.1s 0.4s infinite; left: 65%; width: 10px; height: 10px; }
+.book.open .particle:nth-child(8) { animation: floatUp 2.7s 0.6s infinite; left: 45%; width: 15px; height: 15px; }
+.book.open .particle:nth-child(9) { animation: floatUp 3.3s 0.8s infinite; left: 55%; width: 8px; height: 8px; }
+.book.open .particle:nth-child(10) { animation: floatUp 2.6s 0.9s infinite; left: 25%; width: 11px; height: 11px; }
+
 
 @keyframes floatUp {
-  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } /* Démarrage plus petit, caché */
-  10% { opacity: 1; transform: translate(-50%, 0) scale(1); } /* Apparition rapide, taille normale */
-  100% { transform: translate(-50%, -200px) scale(0); opacity: 0; } /* Monte plus haut et disparaît */
+  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+  10% { opacity: 1; transform: translate(-50%, 0) scale(1.2); } /* Commence plus gros */
+  100% { transform: translate(-50%, -250px) scale(0); opacity: 0; } /* Monte plus haut */
 }
