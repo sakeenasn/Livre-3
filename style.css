@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: linear-gradient(#3b2e2e, #1c1c1c); /* effet bibliothèque */
+}
+
+.scene {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+/* Livre */
+.livre {
+    width: 100px;
+    height: 140px;
+    background: brown;
+    border: 3px solid #6b3e1e;
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+}
+
+/* Page */
+.page {
+    width: 110px;
+    height: 130px;
+    background: white;
+    position: absolute;
+    top: 300px;
+    left: 50%;
+    transform: translateX(-50%) rotateY(90deg);
+    opacity: 0;
+    border-radius: 3px;
+}
+
+/* Particules lumineuses */
+.particles {
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+    opacity: 0;
+    overflow: visible;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 8px white;
+    opacity: 0;
+}
