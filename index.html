@@ -2,193 +2,43 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <title>Livre Magique</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="scene">
-        <div class="book">
-           </div>
-    </div>
+        <div class="book" id="book">
+            
+            <div class="cover-back"></div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+            <div class="page page-content">
+                <h3>Grimoire</h3>
+                <p>Clique pour fermer</p>
+                
+                <div class="magic-particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+            </div>
 
+            <div class="page"></div>
+            <div class="page"></div>
+            <div class="page"></div>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<style>
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #0d1117; /* Couleur de fond sombre GitHub */
-    overflow: hidden;
-    font-family: sans-serif;
-  }
+            <div class="cover-front">
+                <div class="book-title">
+                    <span>CLIQUE</span>
+                    <span style="font-size: 12px;">pour ouvrir</span>
+                </div>
+            </div>
 
-  /* Le conteneur 3D */
-  .scene {
-    perspective: 1000px;
-  }
-
-  .book {
-    position: relative;
-    width: 200px;
-    height: 300px;
-    transform-style: preserve-3d;
-    transform: rotateX(30deg) rotateY(-10deg);
-    transition: transform 1s;
-  }
-
-  /* Les pages et couvertures */
-  .page, .cover-front, .cover-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    transform-origin: left center;
-    border-radius: 5px 15px 15px 5px;
-    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1);
-  }
-
-  .cover-back {
-    background: #8b4513; /* Marron cuir */
-    border: 2px solid #5a2d0c;
-    transform: rotateY(0deg);
-    z-index: 0;
-  }
-
-  .cover-front {
-    background: #8b4513;
-    border: 2px solid #ffd700; /* Bordure dorée */
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffd700;
-    font-size: 2rem;
-    /* Animation d'ouverture */
-    animation: openBook 3s forwards ease-in-out;
-  }
-
-  .page {
-    background: #fffaf0; /* Blanc cassé */
-    border: 1px solid #ddd;
-    z-index: 5;
-  }
-
-  /* Pages qui tournent */
-  .page:nth-child(3) { z-index: 4; animation: turnPage 2.5s 1.2s forwards; }
-  .page:nth-child(4) { z-index: 3; animation: turnPage 2.5s 1.4s forwards; }
-  .page:nth-child(5) { z-index: 2; animation: turnPage 2.5s 1.6s forwards; }
-  
-  /* La page finale (fixe) avec du contenu */
-  .page-content {
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 10px;
-  }
-  .page-content h3 { font-size: 14px; color: #333; margin: 0; }
-  .page-content p { font-size: 10px; color: #555; }
-
-  /* Particules Magiques */
-  .magic-particles {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    transform: translateZ(50px); /* Les faire flotter au dessus */
-    z-index: 20;
-  }
-
-  .particle {
-    position: absolute;
-    bottom: 20%;
-    left: 50%;
-    width: 8px;
-    height: 8px;
-    background: radial-gradient(circle, #fff, #ffd700, transparent);
-    border-radius: 50%;
-    opacity: 0;
-    box-shadow: 0 0 10px #ffd700;
-  }
-
-  /* Génération de plusieurs particules avec délais différents */
-  .particle:nth-child(1) { animation: floatUp 2s 3s infinite; left: 40%; }
-  .particle:nth-child(2) { animation: floatUp 2.5s 3.2s infinite; left: 60%; width: 5px; height: 5px; }
-  .particle:nth-child(3) { animation: floatUp 1.8s 3.5s infinite; left: 30%; width: 6px; height: 6px; }
-  .particle:nth-child(4) { animation: floatUp 2.2s 3.1s infinite; left: 70%; }
-  .particle:nth-child(5) { animation: floatUp 3s 3.3s infinite; left: 50%; width: 4px; height: 4px; }
-
-  /* --- ANIMATIONS --- */
-  
-  @keyframes openBook {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(-160deg); }
-  }
-
-  @keyframes turnPage {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(-155deg); }
-  }
-
-  @keyframes floatUp {
-    0% {
-      transform: translateY(0) scale(1);
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-150px) scale(0);
-      opacity: 0;
-    }
-  }
-
-</style>
-</head>
-<body>
-
-<div class="scene">
-  <div class="book">
-    <div class="cover-back"></div>
-    
-    <div class="page page-content">
-        
-        <h3>Bienvenue</h3>
-        <p>Code & Magie</p>
-        
-        <div class="magic-particles">
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
         </div>
     </div>
 
-    <div class="page"></div>
-    <div class="page"></div>
-    <div class="page"></div>
-
-    <div class="cover-front">
-        <span>Grimoire</span>
-    </div>
-  </div>
-</div>
-
+    <script src="script.js"></script>
 </body>
 </html>
