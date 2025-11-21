@@ -1,48 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Livre Magique V2</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Le Livre Magique</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="scene">
+    <div id="book" class="book" role="button" aria-pressed="false" tabindex="0" aria-label="Livre magique. Appuyez sur Entrée ou cliquez pour ouvrir.">
+      <div class="cover left" aria-hidden="true"></div>
 
-    <div class="scene">
-        <div class="book" id="book">
-            
-            <div class="cover-back"></div>
+      <div class="pages" aria-hidden="true">
+        <div class="page page1"></div>
+        <div class="page page2"></div>
+      </div>
 
-            <!-- Page avec particules -->
-            <div class="page page-content">
-                <div class="magic-particles">
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                </div>
-            </div>
-
-            <!-- Pages internes -->
-            <div class="page"></div>
-            <div class="page"></div>
-            <div class="page"></div>
-
-            <div class="cover-front"></div>
-
-        </div>
+      <div class="cover right" aria-hidden="true"></div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Canvas pour les particules (au-dessus du livre) -->
+    <canvas id="particles" aria-hidden="true"></canvas>
+  </main>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
