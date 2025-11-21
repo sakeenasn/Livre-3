@@ -3,33 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livre Magique Correctif</title>
+    <title>Livre Magique Interactif v2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="stars-container"></div>
-
-    <div class="library-bg"></div>
+    <div class="stars-container">
+        <div class="stars-layer layer-1"></div>
+        <div class="stars-layer layer-2"></div>
+        <div class="stars-layer layer-3"></div>
+    </div>
 
     <div class="controls">
         <button onclick="toggleTheme()">Changer l'ambiance</button>
     </div>
 
-    <div class="book-scene">
-        <div class="book" id="book" onclick="toggleBook()">
-            
+    <div class="book-container" id="bookContainer" onclick="toggleBook()">
+        <div class="book">
             <div class="page back-cover"></div>
+            <div class="spine"></div>
 
-            <div class="page right-page-fixed"></div> <div class="page left-page-turning p2"></div> <div class="page left-page-turning p1"></div> <div class="page inside-cover"></div>
+            <div class="page inner-page p3"></div>
+            <div class="page inner-page p2"></div>
+            <div class="page inner-page p1"></div>
 
             <div class="page front-cover">
-                <div class="cover-content">
-                    <h1>Le Livre<br>Magique</h1>
+                <div>
+                    <h1>Le Grimoire</h1>
                 </div>
             </div>
-
-            <div class="spine"></div>
         </div>
     </div>
 
