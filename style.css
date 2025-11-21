@@ -1,128 +1,76 @@
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #120a1a; /* Fond encore plus sombre et un peu violacé */
-  overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  transition: background-color 0.5s, color 0.5s;
 }
 
-.scene { perspective: 1200px; }
+.controls {
+  margin: 20px;
+}
 
-.book {
-  position: relative;
-  width: 200px;
-  height: 300px;
-  transform-style: preserve-3d;
-  transform: rotateX(20deg) rotateY(-15deg);
-  transition: transform 1s ease-in-out;
+button {
+  margin-right: 10px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
-.book.open {
-  transform: rotateX(5deg) rotateY(0deg);
+.book-container {
+  perspective: 2000px;
 }
 
-/* --- LES ÉLÉMENTS DU LIVRE --- */
-.page, .cover-front, .cover-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0; left: 0;
-  transform-origin: left center;
-  border-radius: 5px 15px 15px 5px;
-  box-shadow: inset 4px 0 15px rgba(0,0,0,0.25); /* Ombre plus intense */
-  transition: transform 1s ease-in-out, z-index 0.5s;
-}
-
-.cover-back {
-  background: #2b1738; /* Couleur de couverture foncée violette */
-  border: 3px solid #5a2e6f; /* Bordure de couverture violette */
-}
-
-.cover-front {
-  background: #2b1738;
-  border: 5px solid #ff00ff; /* Bordure éclatante (Magenta) */
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ff00ff; /* Couleur du texte si vous en remettez un */
-  flex-direction: column;
+.book {
+  width: 300px;
+  height: 400px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  cursor: pointer;
 }
 
 .page {
-  background: #fdfaf0;
-  border: 1px solid #ccc;
-  z-index: 5;
-  /* Reflet de la magie sur les pages ouvertes */
-  box-shadow: inset 4px 0 15px rgba(0,0,0,0.25), 
-              0 0 20px rgba(255,0,255,0.3) inset; /* Lueur violette sur la page */
-}
-
-/* --- LOGIQUE D'OUVERTURE (ACTIVE PAR JS) --- */
-
-.book.open .cover-front {
-  transform: rotateY(-170deg);
-  z-index: 1;
-}
-
-.book.open .page:nth-child(3) { transition-delay: 0.3s; transform: rotateY(-155deg); z-index: 4; }
-.book.open .page:nth-child(4) { transition-delay: 0.6s; transform: rotateY(-150deg); z-index: 5; }
-.book.open .page:nth-child(5) { transition-delay: 0.9s; transform: rotateY(-145deg); z-index: 6; }
-
-/* --- PAGE DE CONTENU (celle avec les particules) --- */
-.page-content {
-  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  backface-visibility: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: 24px;
+  border: 2px solid #000;
 }
 
-/* --- PARTICULES MAGIQUES --- */
-.magic-particles {
-  position: absolute;
-  width: 100%; height: 100%;
+.page1 { z-index: 3; }
+.page2 { transform: rotateY(180deg); z-index: 2; }
+.page3 { transform: rotateY(360deg); z-index: 1; }
+
+.dark-mode {
+  background-color: #111;
+  color: #eee;
+}
+
+.light-mode {
+  background-color: #f5f5f5;
+  color: #111;
+}
+
+.bg-stars {
+  background: url('https://i.ibb.co/3mQxW3T/stars.jpg') center/cover no-repeat;
+}
+
+.bg-library {
+  background: url('https://i.ibb.co/Q6sMqpL/library.jpg') center/cover no-repeat;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 1s 0.8s ease-out; /* Apparaît un peu plus tôt */
-}
-
-.book.open .magic-particles {
-  opacity: 1;
-}
-
-.particle {
-  position: absolute;
-  bottom: 35%; /* Position de départ dans le livre */
-  left: 50%;
-  width: 12px; /* Particules un peu plus grandes */
-  height: 12px;
-  background: radial-gradient(circle, #ffffff, #ff00ff, transparent); /* Magie Blanc/Magenta */
-  border-radius: 50%;
-  opacity: 0;
-  box-shadow: 0 0 20px #ff00ff, 0 0 8px #ffffff; /* Lueur plus intense */
-  transform: translateX(-50%); /* Centrer la particule */
-}
-
-/* Animation individuelle des particules (plus de variété et de délais) */
-.book.open .particle:nth-child(1) { animation: floatUp 2.8s infinite; left: 40%; width: 10px; height: 10px; }
-.book.open .particle:nth-child(2) { animation: floatUp 3.2s 0.2s infinite; left: 60%; width: 14px; height: 14px; }
-.book.open .particle:nth-child(3) { animation: floatUp 2.5s 0.5s infinite; left: 30%; width: 11px; height: 11px; }
-.book.open .particle:nth-child(4) { animation: floatUp 3s 0.1s infinite; left: 70%; width: 13px; height: 13px; }
-.book.open .particle:nth-child(5) { animation: floatUp 3.5s 0.3s infinite; left: 50%; width: 9px; height: 9px; }
-.book.open .particle:nth-child(6) { animation: floatUp 2.9s 0.7s infinite; left: 35%; width: 12px; height: 12px; }
-.book.open .particle:nth-child(7) { animation: floatUp 3.1s 0.4s infinite; left: 65%; width: 10px; height: 10px; }
-.book.open .particle:nth-child(8) { animation: floatUp 2.7s 0.6s infinite; left: 45%; width: 15px; height: 15px; }
-.book.open .particle:nth-child(9) { animation: floatUp 3.3s 0.8s infinite; left: 55%; width: 8px; height: 8px; }
-.book.open .particle:nth-child(10) { animation: floatUp 2.6s 0.9s infinite; left: 25%; width: 11px; height: 11px; }
-
-
-@keyframes floatUp {
-  0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
-  10% { opacity: 1; transform: translate(-50%, 0) scale(1.2); } /* Commence plus gros */
-  100% { transform: translate(-50%, -250px) scale(0); opacity: 0; } /* Monte plus haut */
 }
