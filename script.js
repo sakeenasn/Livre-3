@@ -1,18 +1,50 @@
-const bookContainer = document.getElementById('bookContainer');
+const book = document.getElementById('book');
 const body = document.body;
+const starsContainer = document.getElementById('stars-container');
 let isOpen = false;
 let particleInterval;
 let magicTimeout;
 
+// --- 1. GÉNÉRATION DES ÉTOILES ALÉATOIRES ---
+// On crée 150 étoiles placées n'importe où
+function generateStars() {
+    for(let i=0; i<150; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        // Position aléatoire %
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        // Taille aléatoire
+        const size = Math.random() * 2 + 1;
+        
+        // Vitesse scintillement aléatoire
+        const duration = Math.random() * 3 + 1;
+
+        star.style.left = x + '%';
+        star.style.top = y + '%';
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.animationDuration = duration + 's';
+
+        starsContainer.appendChild(star);
+    }
+}
+// On lance la génération au chargement
+generateStars();
+
+
+// --- 2. OUVERTURE / FERMETURE ---
 function toggleBook() {
     isOpen = !isOpen;
     
     if (isOpen) {
-        bookContainer.classList.add('open');
-        // On attend que le livre soit bien ouvert (1.5s) pour lancer la magie
-        magicTimeout = setTimeout(startMagic, 1500); 
+        book.classList.add('open');
+        // On lance la magie après 1.2 secondes (le temps que les pages tournent)
+        magicTimeout = setTimeout(startMagic, 1200);
     } else {
-        bookContainer.classList.remove('open');
+        book.classList.remove('open');
         clearTimeout(magicTimeout);
         stopMagic();
     }
@@ -22,47 +54,43 @@ function toggleTheme() {
     body.classList.toggle('dark-mode');
 }
 
-// --- MOTEUR DE PARTICULES ---
+// --- 3. SYSTÈME DE PARTICULES EXPLOSIVES ---
 function createParticle() {
     if (!isOpen) return;
 
     const particle = document.createElement('div');
     particle.classList.add('particle');
     
-    // 1. Taille aléatoire
-    const size = Math.random() * 8 + 4;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-
-    // 2. POSITION DE DÉPART : AU CENTRE DE LA PLIURE
-    // Le livre fait 300px de large. Ouvert, la pliure est à gauche (0).
-    // Mais comme on a décalé le conteneur avec translateX(150px), le 0 est le centre visuel.
-    // On les fait partir de (0, Hauteur/2) relative au livre.
+    // --- POSITION DE DÉPART ---
+    // Pour que ça marche peu importe la taille de l'écran, on calcule la position du livre
+    // getBoundingClientRect nous donne la position exacte du livre en pixels
+    const rect = book.getBoundingClientRect();
     
-    // On récupère la position précise
-    const startX = 0; // Pliure du livre (le côté gauche de la page droite)
-    const startY = 210; // Milieu vertical (420px / 2)
-
-    particle.style.left = `${startX}px`;
-    particle.style.top = `${startY}px`;
-
-    // 3. DIRECTION (EXPLOSION 360°)
-    // Angle aléatoire entre 0 et 2*PI (cercle complet)
-    const angle = Math.random() * Math.PI * 2;
+    // Le point de sortie est au milieu du livre (la pliure)
+    // rect.left est le bord gauche du livre fermé. 
+    // Quand le livre est ouvert (open), il est décalé de 150px par le CSS.
+    // Le centre visuel de la pliure est donc : rect.left + (moitié largeur)
     
-    // Distance de vol (Vitesse)
-    const distance = 200 + Math.random() * 300; // Vole entre 200px et 500px
+    /* ASTUCE : Comme le livre bouge, on va viser le centre exact de l'écran 
+       car le livre se centre avec flexbox + translate */
+    const startX = window.innerWidth / 2;
+    const startY = window.innerHeight / 2;
 
-    // Calcul trigonométrique (Maths) pour trouver le point d'arrivée X et Y
-    const destX = Math.cos(angle) * distance;
-    const destY = Math.sin(angle) * distance;
+    particle.style.left = startX + 'px';
+    particle.style.top = startY + 'px';
 
-    // On envoie ces valeurs au CSS
-    particle.style.setProperty('--x', `${destX}px`);
-    particle.style.setProperty('--y', `${destY}px`);
+    // --- DIRECTION ---
+    const angle = Math.random() * Math.PI * 2; // 360 degrés
+    const velocity = 150 + Math.random() * 250; // Distance
 
-    // On attache la particule à la page de droite pour qu'elle bouge avec le livre
-    document.querySelector('.right-page').appendChild(particle);
+    const tx = Math.cos(angle) * velocity;
+    const ty = Math.sin(angle) * velocity;
+
+    particle.style.setProperty('--x', `${tx}px`);
+    particle.style.setProperty('--y', `${ty}px`);
+
+    // IMPORTANT : On attache au BODY, pas au livre, pour éviter les bugs de superposition
+    document.body.appendChild(particle);
 
     setTimeout(() => {
         particle.remove();
@@ -70,11 +98,9 @@ function createParticle() {
 }
 
 function startMagic() {
-    // Explosion initiale
-    for(let i=0; i<40; i++) {
-        setTimeout(createParticle, i * 20);
-    }
-    // Flux continu
+    // Boum initiale
+    for(let i=0; i<30; i++) setTimeout(createParticle, i * 10);
+    // Continue
     particleInterval = setInterval(createParticle, 50);
 }
 
