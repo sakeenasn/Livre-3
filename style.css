@@ -30,7 +30,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #000; /* Fond de base */
+    background: #000;
     font-family: 'Georgia', serif;
     overflow: hidden;
     perspective: 2000px; /* Profondeur 3D */
@@ -113,7 +113,7 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     transform-style: preserve-3d;
 }
 
-/* --- PAGES --- */
+/* --- PAGES ET EFFET VIEILLI --- */
 .page {
     position: absolute; width: 100%; height: 100%; top: 0; left: 0;
     transform-origin: left; transform-style: preserve-3d;
@@ -132,7 +132,7 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     background-position: 0 0, 5px 5px;
 }
 
-/* Couverture Avant - Règle finale sans doublon */
+/* Couverture Avant - Contient la bordure sur les bords extérieurs */
 .front-cover {
     background: var(--book-color); 
     z-index: 20;
@@ -140,19 +140,21 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     justify-content: center; 
     align-items: center;
     
-    /* 🔥 LA BORDURE EST BIEN SUR LE BORD EXTÉRIEUR DU LIVRE 🔥 */
+    /* 🔥 BORDURE D'ORNEMENT SUR LE BORD EXTÉRIEUR 🔥 */
     border: 5px solid var(--gold); 
     
     transition: background-color 1s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* Cache l'effet miroir du titre quand on ouvre le livre */
+    /* Cache l'effet miroir du titre quand on ouvre le livre et force le rendu */
     backface-visibility: hidden; 
+    will-change: transform, z-index; 
+    
+    border-radius: 4px 12px 12px 4px; 
 }
 .cover-content {
     text-align: center; 
     
-    /* 🔥 PLUS DE BORDURE INTERNE ICI 🔥 */
-    /* Padding ajusté pour l'espacement */
+    /* On retire la bordure interne, on ne garde que le padding pour centrer le titre */
     padding: 30px; 
     
     border-radius: 10px; 
@@ -179,13 +181,13 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
 .p2 { z-index: 14; }
 .p3 { z-index: 13; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box;}
 
-/* --- ANIMATION OUVERTURE (Effet Vent) --- */
+/* --- SEQUENCE D'OUVERTURE (Effet Vent) --- */
 .book-container.open .front-cover { transform: rotateY(-180deg); }
 
-/* On décale les angles pour donner du volume */
+/* On décale les angles pour donner du volume et l'effet feuilletage */
 .book-container.open .p1 { transform: rotateY(-170deg); transition-delay: 0.2s; }
 .book-container.open .p2 { transform: rotateY(-160deg); transition-delay: 0.4s; }
-/* La dernière page reste un peu relevée (double page) */
+/* La dernière page reste un peu relevée (double page magique) */
 .book-container.open .p3 { transform: rotateY(-10deg); transition-delay: 0.6s; background: linear-gradient(to right, #ddd, var(--page-color) 10%); border-left: none;}
 
 /* --- PARTICULES --- */
