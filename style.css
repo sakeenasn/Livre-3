@@ -1,120 +1,176 @@
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #0d0a07;
-  margin: 0;
-  font-family: 'Georgia', serif;
+:root{
+  --bg: #0f1724;
+  --book-color: #2b1f12;
+  --page-color: #fffaf0;
+  --accent: #ffd96b;
+  --focus: rgba(255,217,100,0.15);
 }
 
-.scene {
-  perspective: 1500px;
+/* reset & base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255,220,120,0.04), transparent 8%),
+    linear-gradient(180deg, var(--bg) 0%, #071023 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
 }
 
-.book {
-  position: relative;
-  width: 260px;
-  height: 360px;
-  transform-style: preserve-3d;
-  transform: rotateX(20deg) rotateY(-15deg);
-  transition: transform 1s ease-in-out;
-  cursor: pointer;
+/* scène */
+.scene{
+  width:100%;
+  max-width:900px;
+  height:70vh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1200px;
 }
 
-.book.open {
-  transform: rotateX(5deg) rotateY(0deg);
+/* canvas */
+#particles{
+  position:absolute;
+  left:0; top:0; width:100%; height:100%;
+  pointer-events:none;
+  z-index:5;
 }
 
-/* Couverture arrière */
-.cover-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #4e2f14;
-  border: 5px solid #c9a25a;
-  border-radius: 8px 25px 25px 8px;
+/* livre */
+.book{
+  width:480px;
+  height:280px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition: transform 900ms cubic-bezier(.2,.9,.3,1);
+  cursor:pointer;
+  z-index:2;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  user-select: none;
+}
+
+/* focus visible */
+.book:focus-visible{
+  box-shadow: 0 6px 30px var(--focus), inset 0 0 0 3px rgba(255,217,100,0.06);
+  border-radius:6px;
+}
+
+/* couvercles */
+.cover{
+  position:absolute;
+  width:50%;
+  height:100%;
+  top:0;
+  background: linear-gradient(180deg, #3a2a18, #24180f);
+  box-shadow:0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+  backface-visibility: hidden;
+  transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* couvercle gauche */
+.cover.left{
+  left:0;
+  transform-origin: right center;
+  border-right: 1px solid rgba(0,0,0,0.25);
+  transform: rotateY(0deg);
+}
+
+/* couvercle droit */
+.cover.right{
+  right:0;
+  left:auto;
   transform-origin: left center;
-  z-index: 1;
+  border-left: 1px solid rgba(0,0,0,0.14);
+  transform: rotateY(0deg);
 }
 
-/* Couverture avant */
-.cover-front {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #5d3518;
-  border: 5px solid #e2b878;
-  border-radius: 8px 25px 25px 8px;
+/* pages */
+.pages{
+  position:absolute;
+  left:25%;
+  width:50%;
+  height:100%;
+  top:0;
+  transform-origin:center center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1;
+  pointer-events:none;
+  transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* page */
+.page{
+  position:absolute;
+  width:95%;
+  height:96%;
+  background: linear-gradient(180deg, var(--page-color), #f7f1e6);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  border-radius:2px;
+  left:2.5%;
+  top:2%;
   transform-origin: left center;
-  z-index: 15;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: transparent; /* aucun texte */
+  backface-visibility: hidden;
+  overflow:hidden;
+  transition: transform 900ms cubic-bezier(.2,.9,.2,1);
 }
 
-/* Pages */
-.page {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #f2e6c9;
-  border: 1px solid #c9b89a;
-  border-radius: 5px 20px 20px 5px;
-  transform-origin: left center;
-  box-shadow: inset 4px 0 12px rgba(0,0,0,0.2),
-              inset 0 0 15px rgba(255,206,120,0.3);
-  z-index: 5;
+/* textures "texte" */
+.page::before{
+  content:"";
+  position:absolute;
+  inset:20px 18px;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size:100% 18px;
+  opacity:0.7;
 }
 
-/* Pages dans l'ouverture */
-.book.open .page:nth-child(3) { transform: rotateY(-150deg); transition-delay: .2s; }
-.book.open .page:nth-child(4) { transform: rotateY(-145deg); transition-delay: .4s; }
-.book.open .page:nth-child(5) { transform: rotateY(-140deg); transition-delay: .6s; }
-.book.open .page:nth-child(6) { transform: rotateY(-135deg); transition-delay: .8s; }
-
-/* Page de contenu */
-.page-content {
-  z-index: 3;
+/* état ouvert */
+.book.open .cover.left{
+  transform: rotateY(-140deg);
+  transition: transform 1000ms cubic-bezier(.2,.9,.2,1);
+}
+.book.open .cover.right{
+  transform: rotateY(10deg);
+  transition: transform 900ms cubic-bezier(.2,.9,.2,1);
+}
+.book.open .pages{
+  transform: translateZ(18px);
+}
+.book.open .page1{
+  transform: rotateY(-14deg) translateX(-6px);
+}
+.book.open .page2{
+  transform: rotateY(-6deg) translateX(-2px);
 }
 
-/* Particules dorées */
-.magic-particles {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  opacity: 0;
-  transition: opacity 1s 1s;
-  pointer-events: none;
+/* tranche centrale */
+.book::after{
+  content:"";
+  position:absolute;
+  left:49.2%;
+  width:1.6%;
+  height:100%;
+  top:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.05));
+  z-index:3;
+  pointer-events:none;
 }
 
-.book.open .magic-particles {
-  opacity: 1;
+/* responsive */
+@media (max-width:520px){
+  .book{ width:320px; height:200px; }
 }
 
-.particle {
-  position: absolute;
-  bottom: 30%;
-  left: 50%;
-  width: 12px;
-  height: 12px;
-  background: radial-gradient(circle, #ffffff, #ffda77, transparent); /* doré au lieu de violet */
-  border-radius: 50%;
-  box-shadow: 0 0 25px #ffda77, 0 0 10px #fff5d2;
-  opacity: 0;
-}
-
-/* Animations particules */
-.book.open .particle:nth-child(1) { animation: floatUp 3s infinite; left: 40%; }
-.book.open .particle:nth-child(2) { animation: floatUp 3.5s .2s infinite; left: 55%; }
-.book.open .particle:nth-child(3) { animation: floatUp 2.8s .4s infinite; left: 65%; }
-.book.open .particle:nth-child(4) { animation: floatUp 3.2s .1s infinite; left: 30%; }
-.book.open .particle:nth-child(5) { animation: floatUp 3.8s .3s infinite; left: 50%; }
-
-@keyframes floatUp {
-  0%   { transform: translateY(0) scale(0.5); opacity: 0; }
-  15%  { opacity: 1; transform: translateY(-20px) scale(1); }
-  100% { transform: translateY(-260px) scale(0); opacity: 0; }
+/* réduction des animations si user préfère */
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; animation: none !important; }
 }
