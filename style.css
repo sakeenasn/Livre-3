@@ -135,6 +135,25 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     background-position: 0 0, 5px 5px;
 }
 
+/* --- PAGES GÉNÉRIQUES --- */
+
+/* ... (conserver le code existant) ... */
+
+/* Couverture */
+.front-cover {
+    background: var(--book-color); 
+    z-index: 20;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    border: 4px solid #3e2723;
+    transition: background-color 1s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* 🔥 AJOUTEZ CETTE LIGNE 🔥 */
+    backface-visibility: hidden; 
+}
+/* ... (conserver le reste du fichier) ... */
+
 /* Couverture */
 .front-cover {
     background: var(--book-color); z-index: 20;
