@@ -3,8 +3,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #0d0a07;
   margin: 0;
+  background-color: #0d0a07;
   font-family: 'Georgia', serif;
 }
 
@@ -12,17 +12,14 @@ body {
   perspective: 1500px;
 }
 
-/* LIVRE */
+/* --- LIVRE --- */
 .book {
   position: relative;
   width: 260px;
   height: 360px;
   transform-style: preserve-3d;
-
-  /* OUVERTURE TRÈS LENTE */
-  transition: transform 4s ease-in-out;
-
   transform: rotateX(20deg) rotateY(-15deg);
+  transition: transform 4s ease-in-out; /* ouverture lente */
   cursor: pointer;
 }
 
@@ -30,30 +27,26 @@ body {
   transform: rotateX(5deg) rotateY(0deg);
 }
 
-/* COUVERTURE ARRIÈRE */
-.cover-back {
+/* --- COUVERTURES --- */
+.cover-back, .cover-front {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #4e2f14;
-  border: 5px solid #c9a25a;
   border-radius: 8px 25px 25px 8px;
+  border: 5px solid #c9a25a;
   transform-origin: left center;
+  z-index: 20;
+}
+
+.cover-back {
+  background: #4e2f14;
   z-index: 1;
 }
 
-/* COUVERTURE AVANT */
 .cover-front {
-  position: absolute;
-  width: 100%;
-  height: 100%;
   background: #5d3518;
-  border: 5px solid #e2b878;
-  border-radius: 8px 25px 25px 8px;
-  transform-origin: left center;
   z-index: 20;
-
-  color: transparent;
+  color: transparent; /* aucun texte */
 }
 
 /* --- PAGES --- */
@@ -65,32 +58,21 @@ body {
   border-radius: 5px 20px 20px 5px;
   transform-origin: left center;
   border: 1px solid #c9b89a;
-  box-shadow: inset 0 0 8px rgba(0,0,0,0.25);
-
-  /* ANIMATION LENTE PAR PAGE */
-  transition: transform 2.5s ease;
+  box-shadow: inset 4px 0 10px rgba(0,0,0,0.2);
+  transition: transform 2.5s ease-in-out;
+  z-index: 5;
 }
 
-/* PAGE 1 tourne */
-.book.open .page:nth-child(3) {
-  transform: rotateY(-160deg);
-  transition-delay: 0.7s;
-}
-
-/* PAGE 2 tourne */
-.book.open .page:nth-child(4) {
-  transform: rotateY(-140deg);
-  transition-delay: 1.3s;
-}
-
-/* PAGE 3 tourne */
-.book.open .page:nth-child(5) {
-  transform: rotateY(-120deg);
-  transition-delay: 1.9s;
-}
+/* rotation des pages une par une */
+.book.open .page:nth-child(2) { transform: rotateY(-160deg); transition-delay: 0.5s; }
+.book.open .page:nth-child(3) { transform: rotateY(-150deg); transition-delay: 1s; }
+.book.open .page:nth-child(4) { transform: rotateY(-140deg); transition-delay: 1.5s; }
+.book.open .page:nth-child(5) { transform: rotateY(-130deg); transition-delay: 2s; }
+.book.open .page:nth-child(6) { transform: rotateY(-120deg); transition-delay: 2.5s; }
+.book.open .page:nth-child(7) { transform: rotateY(-110deg); transition-delay: 3s; }
+.book.open .page:nth-child(8) { transform: rotateY(-100deg); transition-delay: 3.5s; }
 
 /* --- PARTICULES --- */
-
 .magic-particles {
   position: absolute;
   width: 100%;
@@ -108,19 +90,16 @@ body {
 .particle {
   position: absolute;
   bottom: 25%;
-  width: 14px;
-  height: 14px;
   border-radius: 50%;
-
   background: radial-gradient(circle, #fff8d0, #ffda77, transparent);
   box-shadow: 0 0 25px #ffda77, 0 0 15px #ffffff;
-
-  animation: floatUp 3s infinite ease-out;
   opacity: 0;
+  animation: floatUp 3s infinite ease-out;
 }
 
+/* ANIMATION DES PARTICULES */
 @keyframes floatUp {
   0% { transform: translateY(0) scale(0.4); opacity: 0; }
   20% { opacity: 1; }
-  100% { transform: translateY(-260px) scale(0); opacity: 0; }
+  100% { transform: translateY(-280px) scale(0); opacity: 0; }
 }
