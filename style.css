@@ -12,13 +12,17 @@ body {
   perspective: 1500px;
 }
 
+/* LIVRE */
 .book {
   position: relative;
   width: 260px;
   height: 360px;
   transform-style: preserve-3d;
+
+  /* OUVERTURE TRÈS LENTE */
+  transition: transform 4s ease-in-out;
+
   transform: rotateX(20deg) rotateY(-15deg);
-  transition: transform 2.8s ease-in-out; /* OUVERTURE RALENTIE */
   cursor: pointer;
 }
 
@@ -26,7 +30,7 @@ body {
   transform: rotateX(5deg) rotateY(0deg);
 }
 
-/* Couverture arrière */
+/* COUVERTURE ARRIÈRE */
 .cover-back {
   position: absolute;
   width: 100%;
@@ -38,7 +42,7 @@ body {
   z-index: 1;
 }
 
-/* Couverture avant */
+/* COUVERTURE AVANT */
 .cover-front {
   position: absolute;
   width: 100%;
@@ -48,46 +52,53 @@ body {
   border-radius: 8px 25px 25px 8px;
   transform-origin: left center;
   z-index: 20;
-  display: block;
+
   color: transparent;
 }
 
-/* Pages */
+/* --- PAGES --- */
 .page {
   position: absolute;
   width: 100%;
   height: 100%;
   background: #f2e6c9;
-  border: 1px solid #c9b89a;
   border-radius: 5px 20px 20px 5px;
   transform-origin: left center;
-  box-shadow: inset 4px 0 12px rgba(0,0,0,0.2),
-              inset 0 0 10px rgba(255,206,120,0.2);
-  z-index: 5;
-  transition: transform 1.6s ease-in-out;
+  border: 1px solid #c9b89a;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.25);
+
+  /* ANIMATION LENTE PAR PAGE */
+  transition: transform 2.5s ease;
 }
 
-/* PAGES QUI SE TOURNENT UNE PAR UNE */
-.book.open .page:nth-child(3) { transform: rotateY(-160deg); transition-delay: 0.2s; }
-.book.open .page:nth-child(4) { transform: rotateY(-155deg); transition-delay: 0.5s; }
-.book.open .page:nth-child(5) { transform: rotateY(-150deg); transition-delay: 0.8s; }
-.book.open .page:nth-child(6) { transform: rotateY(-145deg); transition-delay: 1.1s; }
-.book.open .page:nth-child(7) { transform: rotateY(-140deg); transition-delay: 1.3s; }
-.book.open .page:nth-child(8) { transform: rotateY(-135deg); transition-delay: 1.6s; }
-
-/* Page magique */
-.page-content {
-  z-index: 3;
+/* PAGE 1 tourne */
+.book.open .page:nth-child(3) {
+  transform: rotateY(-160deg);
+  transition-delay: 0.7s;
 }
 
-/* RUBAN DE PARTICULES */
+/* PAGE 2 tourne */
+.book.open .page:nth-child(4) {
+  transform: rotateY(-140deg);
+  transition-delay: 1.3s;
+}
+
+/* PAGE 3 tourne */
+.book.open .page:nth-child(5) {
+  transform: rotateY(-120deg);
+  transition-delay: 1.9s;
+}
+
+/* --- PARTICULES --- */
+
 .magic-particles {
+  position: absolute;
   width: 100%;
   height: 100%;
-  position: absolute;
+  pointer-events: none;
+  overflow: visible;
   opacity: 0;
   transition: opacity 2s ease-in-out 1.5s;
-  pointer-events: none;
 }
 
 .book.open .magic-particles {
@@ -96,20 +107,20 @@ body {
 
 .particle {
   position: absolute;
-  bottom: 30%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-
-  background: radial-gradient(circle, #ffffff, #ffda77, transparent);
+  bottom: 25%;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  box-shadow: 0 0 25px #ffda77, 0 0 10px #fff5d2;
-  opacity: 0;
+
+  background: radial-gradient(circle, #fff8d0, #ffda77, transparent);
+  box-shadow: 0 0 25px #ffda77, 0 0 15px #ffffff;
+
   animation: floatUp 3s infinite ease-out;
+  opacity: 0;
 }
 
 @keyframes floatUp {
-  0%   { transform: translateY(0) scale(0.4); opacity: 0; }
-  20%  { transform: translateY(-20px) scale(1); opacity: 1; }
-  100% { transform: translateY(-280px) scale(0); opacity: 0; }
+  0% { transform: translateY(0) scale(0.4); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-260px) scale(0); opacity: 0; }
 }
