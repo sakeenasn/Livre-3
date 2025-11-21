@@ -9,8 +9,8 @@ function toggleBook() {
     
     if (isOpen) {
         bookContainer.classList.add('open');
-        // On attend l'ouverture des pages (2.6 secondes)
-        magicTimeout = setTimeout(startMagic, 2600); 
+        // On attend que le livre soit bien ouvert (1.5s) pour lancer la magie
+        magicTimeout = setTimeout(startMagic, 1500); 
     } else {
         bookContainer.classList.remove('open');
         clearTimeout(magicTimeout);
@@ -22,61 +22,62 @@ function toggleTheme() {
     body.classList.toggle('dark-mode');
 }
 
-// --- SYSTÈME D'EXPLOSION MULTIDIRECTIONNELLE ---
+// --- MOTEUR DE PARTICULES ---
 function createParticle() {
     if (!isOpen) return;
 
     const particle = document.createElement('div');
     particle.classList.add('particle');
     
-    // Taille aléatoire
-    const size = Math.random() * 10 + 5; 
+    // 1. Taille aléatoire
+    const size = Math.random() * 8 + 4;
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
 
-    // Départ : Centre du livre
-    const rect = bookContainer.getBoundingClientRect();
-    const startX = rect.left + rect.width / 2;
-    const startY = rect.top + rect.height / 2;
+    // 2. POSITION DE DÉPART : AU CENTRE DE LA PLIURE
+    // Le livre fait 300px de large. Ouvert, la pliure est à gauche (0).
+    // Mais comme on a décalé le conteneur avec translateX(150px), le 0 est le centre visuel.
+    // On les fait partir de (0, Hauteur/2) relative au livre.
     
+    // On récupère la position précise
+    const startX = 0; // Pliure du livre (le côté gauche de la page droite)
+    const startY = 210; // Milieu vertical (420px / 2)
+
     particle.style.left = `${startX}px`;
     particle.style.top = `${startY}px`;
 
-    // --- LE SECRET DE LA DIRECTION ---
-    // On choisit un angle au hasard entre 0 et 360 degrés (en radians)
+    // 3. DIRECTION (EXPLOSION 360°)
+    // Angle aléatoire entre 0 et 2*PI (cercle complet)
     const angle = Math.random() * Math.PI * 2;
     
-    // On choisit une distance (vitesse) aléatoire vers laquelle la particule va voler
-    const velocity = 200 + Math.random() * 300; // volera entre 200px et 500px loin
+    // Distance de vol (Vitesse)
+    const distance = 200 + Math.random() * 300; // Vole entre 200px et 500px
 
-    // Calcul de la destination X et Y (Trigonométrie simple)
-    const tx = Math.cos(angle) * velocity;
-    const ty = Math.sin(angle) * velocity;
+    // Calcul trigonométrique (Maths) pour trouver le point d'arrivée X et Y
+    const destX = Math.cos(angle) * distance;
+    const destY = Math.sin(angle) * distance;
 
     // On envoie ces valeurs au CSS
-    particle.style.setProperty('--tx', `${tx}px`);
-    particle.style.setProperty('--ty', `${ty}px`);
+    particle.style.setProperty('--x', `${destX}px`);
+    particle.style.setProperty('--y', `${destY}px`);
 
-    document.body.appendChild(particle);
+    // On attache la particule à la page de droite pour qu'elle bouge avec le livre
+    document.querySelector('.right-page').appendChild(particle);
 
-    // Nettoyage
     setTimeout(() => {
         particle.remove();
-    }, 2000);
+    }, 1500);
 }
 
 function startMagic() {
-    stopMagic();
-    
-    // Grosse explosion au début
-    for(let i=0; i<50; i++) {
-        setTimeout(createParticle, i * 10);
+    // Explosion initiale
+    for(let i=0; i<40; i++) {
+        setTimeout(createParticle, i * 20);
     }
-    
-    // Flux continu dense
+    // Flux continu
     particleInterval = setInterval(createParticle, 50);
 }
 
 function stopMagic() {
-    if (particleInterval) clearInterval(particleInterval);
+    clearInterval(particleInterval);
 }
