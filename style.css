@@ -5,7 +5,7 @@
     --bg-radial-edge: #2c1810;   /* Ombre bois sombre */
     --book-color: #5d2e22;       /* Cuir rouge/marron */
     --gold: #ffd700;
-    --page-color: #fffbf0;
+    --page-color: #f5deb3;
     --text-color: #2c1810;
     --star-opacity: 0;
     --library-opacity: 1;
@@ -16,8 +16,8 @@ body.dark-mode {
     --bg-radial-center: #1a1a2e;
     --bg-radial-edge: #000000;
     --book-color: #1a237e;       /* Bleu nuit magique */
-    --gold: #00e5ff;             /* Cyan magique */
-    --page-color: #e0e0e0;
+    --gold: #f5deb3;             /* beige magique */
+    --page-color: #f5deb3;
     --text-color: #000;
     --star-opacity: 1;
     --library-opacity: 0;
@@ -96,6 +96,18 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     box-shadow: inset 15px 0 30px rgba(0,0,0,0.1), 2px 0 5px rgba(0,0,0,0.1);
     /* Transition "Effet Vent" : douce et progressive */
     transition: transform 2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+.inner-page {
+    /* Les styles de base sont conservés */
+    background: var(--page-color);
+    box-shadow: inset 15px 0 30px rgba(0,0,0,0.1), 2px 0 5px rgba(0,0,0,0.1);
+    
+    /* NOUVELLE TEXTURE SUBTILE : Simule de très fines fibres ou des taches de vieillissement */
+    background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
 }
 
 /* Couverture */
