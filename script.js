@@ -7,17 +7,51 @@ let magicTimeout;
 // Couleurs magiques (Or, Violet, Bleu, Blanc)
 const colors = ['#ffd700', '#ff9a9e', '#a18cd1', '#ffffff', '#84fab0'];
 
+// ===============================================
+// FONCTION POUR JOUER UN SON
+// ===============================================
+function playSound(audioId) {
+    const audio = document.getElementById(audioId);
+    if (audio) {
+        audio.currentTime = 0; // Rembobine si déjà en cours de lecture
+        audio.play().catch(e => console.log("Erreur de lecture audio : " + e));
+    }
+}
+// ===============================================
+
 function toggleTheme() {
     body.classList.toggle('dark-mode');
+    // Si vous avez un son pour le thème
+    // playSound('soundTheme'); 
 }
 
 function toggleBook() {
     isOpen = !isOpen;
     
+    // Si vous avez un son pour l'ouverture du livre
+    // playSound('soundBook'); 
+
     if (isOpen) {
         bookContainer.classList.add('open');
-        // On attend la fin de l'animation du vent (env. 2.5s)
+        
+        // ===============================================
+        // DÉCLENCHEMENT DES SONS DE PAGE AU FEUILLETAGE
+        // ===============================================
+        const pageTurnDelay = 200; // Délai en ms entre chaque son de page
+        
+        // Page 1 (démarrage à 300ms après le clic)
+        setTimeout(() => { playSound('soundPage'); }, 300); 
+        
+        // Page 2
+        setTimeout(() => { playSound('soundPage'); }, 300 + pageTurnDelay); 
+        
+        // Page 3
+        setTimeout(() => { playSound('soundPage'); }, 300 + (2 * pageTurnDelay)); 
+        // ===============================================
+
+        // Lancement de la magie après que toutes les pages sont tournées
         magicTimeout = setTimeout(startMagic, 2200); 
+        
     } else {
         bookContainer.classList.remove('open');
         clearTimeout(magicTimeout);
@@ -44,27 +78,22 @@ function createParticle() {
     particle.style.boxShadow = `0 0 ${size * 2}px ${color}`;
 
     // POSITIONNEMENT CRITIQUE
-    // On récupère la position actuelle du livre (qui a bougé à cause du transform)
     const rect = bookContainer.getBoundingClientRect();
-    
-    // Le point de départ est la "pliure" centrale.
-    // Comme le livre est translate de 160px, le centre visuel change.
-    // On vise le centre gauche du conteneur (là où se trouve la tranche une fois ouvert)
     const startX = rect.left; 
-    const startY = rect.top + rect.height / 2 + (Math.random() * 150 - 75); // Un peu de variation en hauteur
+    const startY = rect.top + rect.height / 2 + (Math.random() * 150 - 75); 
     
     particle.style.left = `${startX}px`;
     particle.style.top = `${startY}px`;
 
     // Définition des trajectoires (Variables CSS pour l'animation)
-    const tx = (Math.random() - 0.5) * 50; // Léger mouvement initial latéral
-    const txEnd = (Math.random() - 0.5) * 400; // Grande dispersion vers le haut
+    const tx = (Math.random() - 0.5) * 50; 
+    const txEnd = (Math.random() - 0.5) * 400; 
     
     particle.style.setProperty('--tx', `${tx}px`);
     particle.style.setProperty('--tx-end', `${txEnd}px`);
 
     // Vitesse
-    const duration = Math.random() * 2 + 2; // 2s à 4s
+    const duration = Math.random() * 2 + 2; 
     particle.style.animation = `floatUp ${duration}s ease-out forwards`;
 
     document.body.appendChild(particle);
@@ -77,6 +106,10 @@ function createParticle() {
 
 function startMagic() {
     stopMagic();
+    
+    // Si vous avez un son pour la magie
+    // playSound('soundMagic');
+    
     // Explosion initiale
     for(let i=0; i<20; i++) setTimeout(createParticle, i * 50);
     // Flux continu
