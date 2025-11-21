@@ -1,47 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Livre Magique V2</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livre Magique Interactif</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="controls">
+    <button id="toggleTheme">Changer Thème</button>
+    <button id="toggleBackground">Changer Fond</button>
+  </div>
 
-    <div class="scene">
-        <div class="book" id="book">
-            
-            <div class="cover-back"></div>
-
-            <div class="page page-content">
-                <div class="magic-particles">
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                </div>
-            </div>
-
-            <div class="page"></div>
-            <div class="page"></div>
-            <div class="page"></div>
-
-            <div class="cover-front">
-            </div>
-
-        </div>
+  <div class="book-container">
+    <div class="book" id="book">
+      <div class="page page1">Page 1</div>
+      <div class="page page2">Page 2</div>
+      <div class="page page3">Page 3</div>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <canvas id="particles"></canvas>
+
+  <script src="script.js"></script>
 </body>
 </html>
