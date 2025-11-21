@@ -1,18 +1,14 @@
-$<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livre Magique Interactif Final</title>
+    <title>Livre Magique Correctif</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="stars-container">
-        <div class="stars-layer layer-1"></div>
-        <div class="stars-layer layer-2"></div>
-        <div class="stars-layer layer-3"></div>
-    </div>
+    <div id="stars-container"></div>
 
     <div class="library-bg"></div>
 
@@ -20,19 +16,20 @@ $<!DOCTYPE html>
         <button onclick="toggleTheme()">Changer l'ambiance</button>
     </div>
 
-    <div class="book-container" id="bookContainer" onclick="toggleBook()">
-        <div class="book">
+    <div class="book-scene">
+        <div class="book" id="book" onclick="toggleBook()">
+            
             <div class="page back-cover"></div>
-            <div class="spine"></div>
 
-            <div class="page inner-page left-page"></div>
-            <div class="page inner-page right-page"></div>
+            <div class="page right-page-fixed"></div> <div class="page left-page-turning p2"></div> <div class="page left-page-turning p1"></div> <div class="page inside-cover"></div>
 
             <div class="page front-cover">
-                <div>
+                <div class="cover-content">
                     <h1>Le Livre<br>Magique</h1>
                 </div>
             </div>
+
+            <div class="spine"></div>
         </div>
     </div>
 
