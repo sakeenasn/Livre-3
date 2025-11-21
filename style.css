@@ -3,8 +3,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
   background-color: #0d0a07;
+  margin: 0;
   font-family: 'Georgia', serif;
 }
 
@@ -12,14 +12,13 @@ body {
   perspective: 1500px;
 }
 
-/* --- LIVRE --- */
 .book {
   position: relative;
   width: 260px;
   height: 360px;
   transform-style: preserve-3d;
   transform: rotateX(20deg) rotateY(-15deg);
-  transition: transform 4s ease-in-out; /* ouverture lente */
+  transition: transform 1s ease-in-out;
   cursor: pointer;
 }
 
@@ -27,60 +26,66 @@ body {
   transform: rotateX(5deg) rotateY(0deg);
 }
 
-/* --- COUVERTURES --- */
-.cover-back, .cover-front {
+/* Couverture arrière */
+.cover-back {
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 8px 25px 25px 8px;
-  border: 5px solid #c9a25a;
-  transform-origin: left center;
-  z-index: 20;
-}
-
-.cover-back {
   background: #4e2f14;
+  border: 5px solid #c9a25a;
+  border-radius: 8px 25px 25px 8px;
+  transform-origin: left center;
   z-index: 1;
 }
 
+/* Couverture avant */
 .cover-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background: #5d3518;
-  z-index: 20;
-  color: transparent; /* aucun texte */
+  border: 5px solid #e2b878;
+  border-radius: 8px 25px 25px 8px;
+  transform-origin: left center;
+  z-index: 15;
+
+  display: block;
+  color: transparent; /* pas de texte */
 }
 
-/* --- PAGES --- */
+/* Pages */
 .page {
   position: absolute;
   width: 100%;
   height: 100%;
   background: #f2e6c9;
+  border: 1px solid #c9b89a;
   border-radius: 5px 20px 20px 5px;
   transform-origin: left center;
-  border: 1px solid #c9b89a;
-  box-shadow: inset 4px 0 10px rgba(0,0,0,0.2);
-  transition: transform 2.5s ease-in-out;
+  box-shadow: inset 4px 0 12px rgba(0,0,0,0.2),
+              inset 0 0 15px rgba(255,206,120,0.3);
   z-index: 5;
 }
 
-/* rotation des pages une par une */
-.book.open .page:nth-child(2) { transform: rotateY(-160deg); transition-delay: 0.5s; }
-.book.open .page:nth-child(3) { transform: rotateY(-150deg); transition-delay: 1s; }
-.book.open .page:nth-child(4) { transform: rotateY(-140deg); transition-delay: 1.5s; }
-.book.open .page:nth-child(5) { transform: rotateY(-130deg); transition-delay: 2s; }
-.book.open .page:nth-child(6) { transform: rotateY(-120deg); transition-delay: 2.5s; }
-.book.open .page:nth-child(7) { transform: rotateY(-110deg); transition-delay: 3s; }
-.book.open .page:nth-child(8) { transform: rotateY(-100deg); transition-delay: 3.5s; }
+/* Pages qui s’ouvrent */
+.book.open .page:nth-child(3) { transform: rotateY(-150deg); transition-delay: .2s; }
+.book.open .page:nth-child(4) { transform: rotateY(-145deg); transition-delay: .4s; }
+.book.open .page:nth-child(5) { transform: rotateY(-140deg); transition-delay: .6s; }
+.book.open .page:nth-child(6) { transform: rotateY(-135deg); transition-delay: .8s; }
 
-/* --- PARTICULES --- */
+/* Page magique */
+.page-content {
+  z-index: 3;
+}
+
+/* Particules dorées */
 .magic-particles {
-  position: absolute;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  overflow: visible;
+  position: absolute;
   opacity: 0;
-  transition: opacity 2s ease-in-out 1.5s;
+  transition: opacity 1s 1s;
+  pointer-events: none;
 }
 
 .book.open .magic-particles {
@@ -89,17 +94,25 @@ body {
 
 .particle {
   position: absolute;
-  bottom: 25%;
+  bottom: 30%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #ffffff, #ffda77, transparent); /* doré au lieu de violet */
   border-radius: 50%;
-  background: radial-gradient(circle, #fff8d0, #ffda77, transparent);
-  box-shadow: 0 0 25px #ffda77, 0 0 15px #ffffff;
+  box-shadow: 0 0 25px #ffda77, 0 0 10px #fff5d2;
   opacity: 0;
-  animation: floatUp 3s infinite ease-out;
 }
 
-/* ANIMATION DES PARTICULES */
+/* Animations des particules */
+.book.open .particle:nth-child(1) { animation: floatUp 3s infinite; left: 40%; }
+.book.open .particle:nth-child(2) { animation: floatUp 3.5s .2s infinite; left: 55%; }
+.book.open .particle:nth-child(3) { animation: floatUp 2.8s .4s infinite; left: 65%; }
+.book.open .particle:nth-child(4) { animation: floatUp 3.2s .1s infinite; left: 30%; }
+.book.open .particle:nth-child(5) { animation: floatUp 3.8s .3s infinite; left: 50%; }
+
 @keyframes floatUp {
-  0% { transform: translateY(0) scale(0.4); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(-280px) scale(0); opacity: 0; }
+  0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+  15%  { opacity: 1; transform: translateY(-20px) scale(1); }
+  100% { transform: translateY(-260px) scale(0); opacity: 0; }
 }
