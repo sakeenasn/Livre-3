@@ -49,8 +49,10 @@ body {
   transform-origin: left center;
   z-index: 15;
 
-  display: block;
-  color: transparent; /* pas de texte */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: transparent; /* aucun texte */
 }
 
 /* Pages */
@@ -67,13 +69,13 @@ body {
   z-index: 5;
 }
 
-/* Pages qui s’ouvrent */
+/* Pages dans l'ouverture */
 .book.open .page:nth-child(3) { transform: rotateY(-150deg); transition-delay: .2s; }
 .book.open .page:nth-child(4) { transform: rotateY(-145deg); transition-delay: .4s; }
 .book.open .page:nth-child(5) { transform: rotateY(-140deg); transition-delay: .6s; }
 .book.open .page:nth-child(6) { transform: rotateY(-135deg); transition-delay: .8s; }
 
-/* Page magique */
+/* Page de contenu */
 .page-content {
   z-index: 3;
 }
@@ -104,7 +106,7 @@ body {
   opacity: 0;
 }
 
-/* Animations des particules */
+/* Animations particules */
 .book.open .particle:nth-child(1) { animation: floatUp 3s infinite; left: 40%; }
 .book.open .particle:nth-child(2) { animation: floatUp 3.5s .2s infinite; left: 55%; }
 .book.open .particle:nth-child(3) { animation: floatUp 2.8s .4s infinite; left: 65%; }
