@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livre Magique Interactif</title>
+    <title>Livre Magique Interactif v2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="stars"></div>
+    <div class="stars-container">
+        <div class="stars-layer layer-1"></div>
+        <div class="stars-layer layer-2"></div>
+        <div class="stars-layer layer-3"></div>
+    </div>
 
     <div class="controls">
         <button onclick="toggleTheme()">Changer l'ambiance</button>
@@ -17,21 +21,15 @@
     <div class="book-container" id="bookContainer" onclick="toggleBook()">
         <div class="book">
             <div class="page back-cover"></div>
-            
             <div class="spine"></div>
 
-            <div class="page inner-page" style="z-index: 2;">
-                <div class="page-back"></div>
-                <h3>Chapitre 1</h3>
-                <p><span class="drop-cap">I</span>l était une fois, dans une bibliothèque numérique, un livre qui attendait d'être ouvert...</p>
-                <p>Le vent soufflait doucement entre les pages, murmurant des secrets de code et de magie.</p>
-                <div style="text-align: center; margin-top: 20px;">✨</div>
-            </div>
+            <div class="page inner-page p3"></div>
+            <div class="page inner-page p2"></div>
+            <div class="page inner-page p1"></div>
 
             <div class="page front-cover">
                 <div>
-                    <h1>Le Livre<br>Magique</h1>
-                    <p style="text-align: center; font-style: italic;">Cliquez pour ouvrir</p>
+                    <h1>Le Grimoire</h1>
                 </div>
             </div>
         </div>
