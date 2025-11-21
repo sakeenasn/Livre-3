@@ -4,8 +4,8 @@
     --bg-radial-center: #8e5e48; /* Bois chaud lumineux */
     --bg-radial-edge: #2c1810;   /* Ombre bois sombre */
     --book-color: #5d2e22;       /* Cuir rouge/marron */
-    --gold: #f5deb3;
-    --page-color: #f5deb3;
+    --gold: #f5deb3;             /* Beige vieilli pour ornement */
+    --page-color: #f5deb3;       /* Beige effet vieux */
     --text-color: #f5deb3;
     --star-opacity: 0;
     --library-opacity: 1;
@@ -16,8 +16,8 @@ body.dark-mode {
     --bg-radial-center: #1a1a2e;
     --bg-radial-edge: #000000;
     --book-color: #1a237e;       /* Bleu nuit magique */
-    --gold: #f5deb3;             /* beige magique */
-    --page-color: #f5deb3;
+    --gold: #d2b48c;             /* Beige vieilli sombre */
+    --page-color: #d2b48c;       /* Beige vieilli plus sombre */
     --text-color: #000;
     --star-opacity: 1;
     --library-opacity: 0;
@@ -54,37 +54,38 @@ body {
 }
 .stars-layer {
     position: absolute; inset: 0;
-    /* Ajoutez ICI beaucoup plus de lignes 'radial-gradient' */
+    /* Grande densité d'étoiles aléatoires */
     background-image: 
-        radial-gradient(1px 1px at 10px 10px, #fff, transparent),
-        radial-gradient(1px 1px at 50px 80px, #fff, transparent),
-        radial-gradient(2px 2px at 120px 30px, #eee, transparent),
-        radial-gradient(2px 2px at 180px 150px, #fff, transparent),
-        /* Ajoutez 10, 20, 50 lignes supplémentaires ici pour plus de densité ! */
-        radial-gradient(1px 1px at 250px 90px, #ddd, transparent),
-        radial-gradient(1px 1px at 300px 200px, #fff, transparent),
-        radial-gradient(2px 2px at 400px 150px, #eee, transparent),
-        radial-gradient(1px 1px at 500px 250px, #fff, transparent),
-        radial-gradient(2px 2px at 600px 100px, #ddd, transparent); 
-        /* ... continuez à ajouter des lignes ... */
+        radial-gradient(1px 1px at 10px 10px, #fff, transparent), radial-gradient(1px 1px at 50px 80px, #fff, transparent),
+        radial-gradient(2px 2px at 120px 30px, #eee, transparent), radial-gradient(2px 2px at 180px 150px, #fff, transparent),
+        radial-gradient(1px 1px at 250px 90px, #ddd, transparent), radial-gradient(1px 1px at 300px 200px, #fff, transparent),
+        radial-gradient(2px 2px at 400px 150px, #eee, transparent), radial-gradient(1px 1px at 500px 250px, #fff, transparent),
+        radial-gradient(2px 2px at 600px 100px, #ddd, transparent), radial-gradient(1px 1px at 700px 300px, #fff, transparent),
+        radial-gradient(1px 1px at 800px 50px, #eee, transparent), radial-gradient(2px 2px at 900px 220px, #fff, transparent),
+        radial-gradient(1px 1px at 50px 450px, #ddd, transparent), radial-gradient(2px 2px at 200px 350px, #fff, transparent),
+        radial-gradient(1px 1px at 450px 600px, #eee, transparent), radial-gradient(2px 2px at 650px 400px, #fff, transparent);
+        
     background-repeat: repeat;
     animation: moveStars linear infinite;
 }
 .layer-1 { 
-    /* Augmentez ces valeurs ! Plus elles sont grandes, plus l'aléatoire est étendu. */
     background-size: 500px 500px; 
     animation-duration: 60s; 
     opacity: 0.5; 
 }
 .layer-2 { 
-    background-size: 800px 800px; /* Plus grand */
+    background-size: 800px 800px; 
     animation-duration: 100s; 
     opacity: 0.7; 
 }
-/* ... etc. */
+.layer-3 { 
+    background-size: 400px 400px;
+    animation-duration: 150s; 
+    opacity: 1; 
+}
+
 @keyframes moveStars { 
     from { transform: translateY(0); } 
-    /* La boucle se fait lorsque le fond a défilé sur toute sa hauteur */
     to { transform: translateY(-100%); } 
 }
 
@@ -123,11 +124,7 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     transition: transform 2s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 .inner-page {
-    /* Les styles de base sont conservés */
-    background: var(--page-color);
-    box-shadow: inset 15px 0 30px rgba(0,0,0,0.1), 2px 0 5px rgba(0,0,0,0.1);
-    
-    /* NOUVELLE TEXTURE SUBTILE : Simule de très fines fibres ou des taches de vieillissement */
+    /* NOUVELLE TEXTURE SUBTILE pour l'effet vieux papier */
     background-image: 
         radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
         radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
@@ -135,35 +132,31 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     background-position: 0 0, 5px 5px;
 }
 
-/* --- PAGES GÉNÉRIQUES --- */
-
-/* ... (conserver le code existant) ... */
-
-/* Couverture */
+/* Couverture Avant - Règle finale sans doublon */
 .front-cover {
     background: var(--book-color); 
     z-index: 20;
     display: flex; 
     justify-content: center; 
     align-items: center;
-    border: 4px solid #3e2723;
+    
+    /* 🔥 LA BORDURE EST BIEN SUR LE BORD EXTÉRIEUR DU LIVRE 🔥 */
+    border: 5px solid var(--gold); 
+    
     transition: background-color 1s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* 🔥 AJOUTEZ CETTE LIGNE 🔥 */
+    /* Cache l'effet miroir du titre quand on ouvre le livre */
     backface-visibility: hidden; 
 }
-/* ... (conserver le reste du fichier) ... */
-
-/* Couverture */
-.front-cover {
-    background: var(--book-color); z-index: 20;
-    display: flex; justify-content: center; align-items: center;
-    border: 4px solid #3e2723;
-    transition: background-color 1s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
-}
 .cover-content {
-    text-align: center; border: 2px solid var(--gold);
-    padding: 40px; border-radius: 10px; color: var(--gold);
+    text-align: center; 
+    
+    /* 🔥 PLUS DE BORDURE INTERNE ICI 🔥 */
+    /* Padding ajusté pour l'espacement */
+    padding: 30px; 
+    
+    border-radius: 10px; 
+    color: var(--gold);
     box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
