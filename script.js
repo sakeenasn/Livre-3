@@ -4,75 +4,83 @@ let isOpen = false;
 let particleInterval;
 let magicTimeout;
 
-// Fonction pour ouvrir/fermer le livre
-function toggleBook() {
-    isOpen = !isOpen;
-    
-    if (isOpen) {
-        bookContainer.classList.add('open');
-        // IMPORTANT : On attend que les pages aient fini de tourner.
-        // La transition CSS la plus longue est de 1.8s + 0.7s de délai = 2.5s.
-        // On lance la magie juste après.
-        magicTimeout = setTimeout(startMagic, 2600); 
-    } else {
-        bookContainer.classList.remove('open');
-        // Si on ferme, on arrête tout de suite la magie
-        clearTimeout(magicTimeout);
-        stopMagic();
-    }
-}
+// Couleurs magiques (Or, Violet, Bleu, Blanc)
+const colors = ['#ffd700', '#ff9a9e', '#a18cd1', '#ffffff', '#84fab0'];
 
 function toggleTheme() {
     body.classList.toggle('dark-mode');
 }
 
-// --- NOUVEAU SYSTÈME DE PARTICULES ---
+function toggleBook() {
+    isOpen = !isOpen;
+    
+    if (isOpen) {
+        bookContainer.classList.add('open');
+        // On attend la fin de l'animation du vent (env. 2.5s)
+        magicTimeout = setTimeout(startMagic, 2200); 
+    } else {
+        bookContainer.classList.remove('open');
+        clearTimeout(magicTimeout);
+        stopMagic();
+    }
+}
+
+// Créer une particule
 function createParticle() {
+    // Sécurité : Si le livre n'est plus ouvert, on arrête
     if (!isOpen) return;
 
     const particle = document.createElement('div');
     particle.classList.add('particle');
     
-    // Taille aléatoire pour plus de réalisme
-    const size = Math.random() * 8 + 4; // entre 4px et 12px
+    // Taille aléatoire (petite et grande)
+    const size = Math.random() * 8 + 3; 
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
+    
+    // Couleur aléatoire + Glow
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    particle.style.background = color;
+    particle.style.boxShadow = `0 0 ${size * 2}px ${color}`;
 
-    // Position de départ : au milieu du livre ouvert (la pliure)
+    // POSITIONNEMENT CRITIQUE
+    // On récupère la position actuelle du livre (qui a bougé à cause du transform)
     const rect = bookContainer.getBoundingClientRect();
-    const startX = rect.left + rect.width / 2;
-    const startY = rect.top + rect.height / 2 + (Math.random() * 100 - 50); // Un peu de variation verticale
+    
+    // Le point de départ est la "pliure" centrale.
+    // Comme le livre est translate de 160px, le centre visuel change.
+    // On vise le centre gauche du conteneur (là où se trouve la tranche une fois ouvert)
+    const startX = rect.left; 
+    const startY = rect.top + rect.height / 2 + (Math.random() * 150 - 75); // Un peu de variation en hauteur
     
     particle.style.left = `${startX}px`;
     particle.style.top = `${startY}px`;
 
-    // Dérive horizontale aléatoire (Drift)
-    // La particule va aller un peu à gauche ou à droite en montant
-    const drift = (Math.random() - 0.5) * 300; // Entre -150px et +150px
-    particle.style.setProperty('--drift', `${drift}px`);
+    // Définition des trajectoires (Variables CSS pour l'animation)
+    const tx = (Math.random() - 0.5) * 50; // Léger mouvement initial latéral
+    const txEnd = (Math.random() - 0.5) * 400; // Grande dispersion vers le haut
+    
+    particle.style.setProperty('--tx', `${tx}px`);
+    particle.style.setProperty('--tx-end', `${txEnd}px`);
 
-    // Vitesse d'animation aléatoire
-    const duration = Math.random() * 2 + 2.5; // entre 2.5s et 4.5s
-    particle.style.animation = `magicalFloat ${duration}s ease-out forwards`;
+    // Vitesse
+    const duration = Math.random() * 2 + 2; // 2s à 4s
+    particle.style.animation = `floatUp ${duration}s ease-out forwards`;
 
     document.body.appendChild(particle);
 
-    // Nettoyage
+    // Nettoyage du DOM
     setTimeout(() => {
         particle.remove();
     }, duration * 1000);
 }
 
 function startMagic() {
-    stopMagic(); // Sécurité
-    
-    // Grosse explosion initiale rapide
-    for(let i=0; i<30; i++) {
-        setTimeout(createParticle, i * 30);
-    }
-    
-    // Flux continu très dense (toutes les 40ms)
-    particleInterval = setInterval(createParticle, 40);
+    stopMagic();
+    // Explosion initiale
+    for(let i=0; i<20; i++) setTimeout(createParticle, i * 50);
+    // Flux continu
+    particleInterval = setInterval(createParticle, 50);
 }
 
 function stopMagic() {
