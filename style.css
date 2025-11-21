@@ -1,169 +1,151 @@
 /* --- VARIABLES --- */
 :root {
-    /* Couleurs du livre */
     --book-color: #3e2723;
     --page-color: #fffbf0;
-    --title-color: #eaddcf; /* BEIGE DEMANDÉ */
-    
-    /* Boutons */
+    --title-color: #eaddcf; /* BEIGE */
     --btn-bg: #fff;
     --btn-text: #3e2723;
-    
-    /* Gestion des fonds */
-    --library-opacity: 1; /* Visible par défaut */
-    --star-opacity: 0;    /* Invisible par défaut */
+    --library-opacity: 1; 
+    --star-opacity: 0;
 }
 
 body.dark-mode {
-    --library-opacity: 0; /* On cache la bibliothèque */
-    --star-opacity: 1;    /* On affiche les étoiles */
+    --library-opacity: 0;
+    --star-opacity: 1;
     --btn-bg: #ffd700;
     --btn-text: #000;
 }
 
-/* --- CONFIGURATION GENERALE --- */
 body {
     margin: 0; height: 100vh;
     display: flex; justify-content: center; align-items: center;
-    background-color: #1a1a1a; /* Couleur de fond de base si tout échoue */
+    background-color: #1a1a1a;
     font-family: 'Georgia', serif;
     overflow: hidden;
-    perspective: 1500px;
+    perspective: 1500px; /* Perspective 3D essentielle */
 }
 
-/* --- FOND BIBLIOTHEQUE (EFFET BOIS / ETAGERE) --- */
+/* --- FONDS --- */
+/* Étoiles (Géré par JS pour l'aléatoire, style de base ici) */
+#stars-container {
+    position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+    pointer-events: none; z-index: -1; opacity: var(--star-opacity);
+    transition: opacity 1s ease;
+    background: radial-gradient(circle at center, #0b0b15, #000);
+}
+.star {
+    position: absolute; background: white; border-radius: 50%;
+    animation: twinkle infinite ease-in-out;
+}
+@keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; transform: scale(1.2); } }
+
+/* Bibliothèque */
 .library-bg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -2;
-    /* Dégradé complexe pour imiter du bois et de la profondeur */
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
     background: 
-        linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 10%),
-        repeating-linear-gradient(90deg, #3e2723 0px, #3e2723 40px, #4e342e 40px, #4e342e 80px),
-        linear-gradient(#5d4037, #3e2723);
-    background-blend-mode: multiply;
+        linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.1)),
+        repeating-linear-gradient(90deg, #4a332a 0px, #4a332a 40px, #3e2723 41px, #3e2723 80px);
     opacity: var(--library-opacity);
     transition: opacity 1s ease;
 }
 
-/* --- FOND ETOILÉ (Reste identique car tu l'aimais) --- */
-.stars-container {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: -1;
-    opacity: var(--star-opacity);
-    transition: opacity 1s ease;
-    background: #050510; /* Fond noir profond */
-}
-.stars-layer {
-    position: absolute; inset: 0;
-    background-repeat: repeat; animation: moveStars linear infinite;
-}
-.layer-1 { background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; animation-duration: 100s; opacity: 0.5;}
-.layer-2 { background-image: radial-gradient(white 1px, transparent 1px); background-size: 100px 100px; animation-duration: 150s; opacity: 0.7;}
-.layer-3 { background-image: radial-gradient(white 2px, transparent 2px); background-size: 200px 200px; animation-duration: 200s;}
-@keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-100%); } }
-
-/* --- BOUTON --- */
+/* --- BOUTONS --- */
 .controls { position: absolute; top: 20px; z-index: 100; }
-button {
-    padding: 10px 20px; border: none; border-radius: 20px;
-    background: var(--btn-bg); color: var(--btn-text);
-    font-weight: bold; cursor: pointer;
-    transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
+button { padding: 10px 20px; border-radius: 20px; border: none; font-weight: bold; background: var(--btn-bg); color: var(--btn-text); cursor: pointer; transition: 0.3s; }
 
-/* --- LIVRE 3D --- */
-.book-container {
-    position: relative; width: 300px; height: 420px;
-    transform-style: preserve-3d; cursor: pointer;
-    transition: transform 1s ease;
+/* --- LIVRE --- */
+.book-scene {
+    width: 300px; height: 420px; position: relative;
+    perspective: 1500px;
 }
 
 .book {
     width: 100%; height: 100%; position: relative;
     transform-style: preserve-3d;
+    transition: transform 1s ease;
 }
 
-/* Pages et Couvertures */
+/* Quand le livre s'ouvre, on le décale pour qu'il reste centré */
+.book.open { transform: translateX(150px); }
+
 .page {
     position: absolute; width: 100%; height: 100%; top: 0; left: 0;
-    transform-origin: left; border-radius: 5px 15px 15px 5px;
+    border-radius: 5px 15px 15px 5px;
+    transform-origin: left; /* TOUT TOURNE DEPUIS LA GAUCHE */
     transform-style: preserve-3d;
-    transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: inset 10px 0 30px rgba(0,0,0,0.2);
 }
 
-/* COUVERTURE AVANT */
+/* 1. COUVERTURE AVANT */
 .front-cover {
     background: var(--book-color); z-index: 20;
     display: flex; justify-content: center; align-items: center;
     border: 2px solid #2a1510;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-}
-.front-cover h1 {
-    color: var(--title-color); /* BEIGE ICI */
-    font-size: 2.2em; text-align: center;
-    border: 2px solid var(--title-color);
-    padding: 20px; border-radius: 10px;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    transition: transform 1.5s cubic-bezier(0.2, 0, 0.2, 1);
+    
+    /* LA SOLUTION MIROIR : On cache le dos de la couverture */
+    backface-visibility: hidden; 
 }
 
-/* PAGES INTÉRIEURES (Gauche et Droite) */
-.inner-page {
+.cover-content h1 {
+    color: var(--title-color); text-align: center; font-size: 2.2em;
+    border: 3px solid var(--title-color); padding: 20px; border-radius: 10px;
+}
+
+/* 2. INTERIEUR COUVERTURE (Ce qu'on voit quand la couverture tourne) */
+.inside-cover {
+    background: var(--book-color); z-index: 19;
+    transition: transform 1.5s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* 3. PAGES */
+.inner-page, .left-page-turning, .right-page-fixed {
     background: var(--page-color);
-    box-shadow: inset 10px 0 20px rgba(0,0,0,0.1);
 }
-.left-page { z-index: 10; }
-.right-page { z-index: 9; }
+.left-page-turning {
+    z-index: 15;
+    transition: transform 1.6s cubic-bezier(0.2, 0, 0.2, 1);
+}
+.right-page-fixed {
+    z-index: 5; /* Reste en bas */
+}
 
-/* DOS ET TRANCHE */
+/* 4. COUVERTURE ARRIERE */
 .back-cover {
     background: var(--book-color); z-index: 0;
     transform: translateZ(-20px);
-    box-shadow: 10px 10px 40px rgba(0,0,0,0.6);
+    box-shadow: 20px 20px 50px rgba(0,0,0,0.5);
 }
 .spine {
-    position: absolute; top: 0; left: 0; width: 20px; height: 100%;
-    background: #2a1510;
-    transform: rotateY(-90deg) translateX(-10px); transform-origin: left;
+    position: absolute; left: 0; top: 0; width: 20px; height: 100%;
+    background: #2a1510; transform: rotateY(-90deg) translateX(-10px);
+    transform-origin: left;
 }
 
-/* --- ETATS D'OUVERTURE (Corrige l'aspect "moche") --- */
-/* 1. On décale tout le livre vers la droite pour le centrer une fois ouvert */
-.book-container.open { transform: translateX(150px); }
+/* --- ANIMATION OUVERTURE --- */
+/* La couverture tourne à -180deg */
+.book.open .front-cover { transform: rotateY(-180deg); }
+.book.open .inside-cover { transform: rotateY(-180deg); } /* Suit la couverture */
 
-/* 2. La couverture tourne à 180° */
-.book-container.open .front-cover { transform: rotateY(-180deg); }
-
-/* 3. La page de gauche suit la couverture (avec un petit délai pour l'effet vent) */
-.book-container.open .left-page { 
-    transform: rotateY(-175deg); 
-    transition-delay: 0.2s;
-}
-/* 4. La page de droite reste à plat (0deg) mais semble être celle du dessous */
-.book-container.open .right-page { 
-    transform: rotateY(-3deg); /* Légère courbe pour le réalisme */
-}
+/* Les pages tournent un peu moins pour l'effet éventail */
+.book.open .p1 { transform: rotateY(-176deg); transition-delay: 0.2s; }
+.book.open .p2 { transform: rotateY(-172deg); transition-delay: 0.4s; }
 
 
-/* --- PARTICULES (Vraie explosion 360°) --- */
+/* --- PARTICULES --- */
 .particle {
     position: absolute;
+    width: 8px; height: 8px;
+    background: radial-gradient(circle, #fff, gold);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 50; /* Au dessus des pages */
-    background: radial-gradient(circle, #fff, gold);
-    /* Utilisation des variables CSS calculées en JS */
-    transform: translate(0, 0);
-    animation: explosion 1.5s ease-out forwards;
+    z-index: 9999; /* Au dessus de TOUT */
+    box-shadow: 0 0 10px gold;
+    /* Animation définie ici */
+    animation: magicFly 1.5s ease-out forwards;
 }
 
-@keyframes explosion {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(0.5);
-    }
-    100% {
-        opacity: 0;
-        /* X et Y définis par le JavaScript pour aller dans TOUTES les directions */
-        transform: translate(var(--x), var(--y)) scale(0);
-    }
+@keyframes magicFly {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0); }
 }
