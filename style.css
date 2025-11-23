@@ -142,13 +142,8 @@ button:hover { background: var(--gold); color: #000; transform: scale(1.05); }
     
     /* Maintient la transition */
     transition: background-color 1s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Cache l'effet miroir et force le rendu 3D au premier plan */
-    backface-visibility: hidden; 
-    will-change: transform, z-index; 
-    
-    border-radius: 4px 12px 12px 4px; 
 }
+
 .cover-content {
     text-align: center; 
     padding: 30px; 
