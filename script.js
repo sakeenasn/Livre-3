@@ -218,22 +218,20 @@ function resetBook() {
 
 //button lumiere
 function toggleLumiere() {
-    if (!isOpen) return; // ne rien faire si le livre est fermé
+    if (!isOpen) return;
+
+    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+    const centerX = origin.left + origin.width / 2;
+    const centerY = origin.top + origin.height / 2;
 
     const beam = document.createElement('div');
     beam.classList.add('magic-beam');
     document.body.appendChild(beam);
 
-    // Récupère le centre du particleOrigin
-    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
-    const centerX = origin.left + origin.width / 2;
-    const centerY = origin.top + origin.height / 2;
-
-    const beamWidth = 700; // largeur du faisceau
-
-    // Centre le faisceau sur particleOrigin
-    beam.style.left = `${centerX - beamWidth / 2}px`;
+    // Posicionamento absoluto
+    beam.style.left = `${centerX}px`;
     beam.style.top  = `${centerY}px`;
+    beam.style.transform = 'translate(-50%, 0)'; // centraliza horizontalmente
 
     setTimeout(() => beam.remove(), 2600);
 }
