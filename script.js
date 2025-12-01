@@ -220,18 +220,20 @@ function resetBook() {
 function toggleLumiere() {
     if (!isOpen) return;
 
-    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
-    const centerX = origin.left + origin.width / 2;
-    const centerY = origin.top + origin.height / 2;
+    const origin = document.getElementById('particleOrigin');
 
     const beam = document.createElement('div');
     beam.classList.add('magic-beam');
-    document.body.appendChild(beam);
 
-    // Posicionamento absoluto
-    beam.style.left = `${centerX}px`;
-    beam.style.top  = `${centerY}px`;
-    beam.style.transform = 'translate(-50%, 0)'; // centraliza horizontalmente
+    // adiciona como filho de particleOrigin
+    origin.appendChild(beam);
 
+    // posiciona no centro de particleOrigin
+    beam.style.position = 'absolute';
+    beam.style.left = '50%';
+    beam.style.top = '0';
+    beam.style.transform = 'translateX(-50%)';
+
+    // remove após a animação
     setTimeout(() => beam.remove(), 2600);
 }
