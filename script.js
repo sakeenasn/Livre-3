@@ -218,19 +218,22 @@ function resetBook() {
 
 //button lumiere
 function toggleLumiere() {
-    if (!isOpen) return; // Ne fonctionne que si le livre est ouvert
-
-    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+    if (!isOpen) return; // ne rien faire si le livre est fermé
 
     const beam = document.createElement('div');
     beam.classList.add('magic-beam');
-
-    // Positionner exactement au centre des particules
-    beam.style.left = origin.left + origin.width / 2 + 'px';
-    beam.style.top  = origin.top + origin.height / 2 + 'px';
-
     document.body.appendChild(beam);
 
-    // Supprimer après l'animation
+    // Récupère le centre du particleOrigin
+    const origin = document.getElementById('particleOrigin').getBoundingClientRect();
+    const centerX = origin.left + origin.width / 2;
+    const centerY = origin.top + origin.height / 2;
+
+    const beamWidth = 700; // largeur du faisceau
+
+    // Centre le faisceau sur particleOrigin
+    beam.style.left = `${centerX - beamWidth / 2}px`;
+    beam.style.top  = `${centerY}px`;
+
     setTimeout(() => beam.remove(), 2600);
 }
